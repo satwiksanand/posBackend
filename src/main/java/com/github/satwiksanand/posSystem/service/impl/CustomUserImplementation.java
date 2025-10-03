@@ -17,6 +17,10 @@ public class CustomUserImplementation implements UserDetailsService {
 
     private UserRepository userRepository;
 
+    public CustomUserImplementation(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);

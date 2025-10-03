@@ -1,20 +1,16 @@
 package com.github.satwiksanand.posSystem.models;
 
 import com.github.satwiksanand.posSystem.domain.UserRole;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,7 +18,9 @@ import java.util.Objects;
 public class User {
 
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Builder.Default
+    private Long id = null;
 
     @Column(nullable = false)
     private String fullname;
