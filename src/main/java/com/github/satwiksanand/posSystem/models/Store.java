@@ -1,8 +1,7 @@
 package com.github.satwiksanand.posSystem.models;
 
-import com.github.satwiksanand.posSystem.domain.UserRole;
+import com.github.satwiksanand.posSystem.domain.StoreStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -10,41 +9,47 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Builder
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Store {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Builder.Default
-    private Long id = null;
+    private Long id;
 
     @Column(nullable = false)
-    private String fullname;
+    private String brand;
 
-    @Column(nullable = false, unique = true)
-    @Email(message = "Valid Email is required!")
-    private String email;
-
-    @Column(nullable = false)
-    private String password;
-
-    private String phone;
-
-    @Column(nullable = false)
-    private UserRole role;
-
-    @ManyToOne
-    private Store store;
+    @OneToOne//for now i want the fetch type to be eager, will change it in the future if necessary.
+    private User storeAdmin;
 
     private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
-    private LocalDateTime lastLogin;
+    private LocalDateTime updatedAt;
 
-    // ---------------------------
+    private String description;
+
+    private String storeType;
+
+    private StoreStatus status;
+
+    @Embedded
+    private StoreContact contact;
+
+    //these are lifecycle methods of jakarta persistence or JPA not spring data JPA.
+    @PrePersist//this annotation means the following callback will be executed before the current entity is inserted in to the database.
+    protected void onCreate(){
+        createdAt = LocalDateTime.now();
+        status = StoreStatus.PENDING;
+    }
+
+    @PreUpdate//before the current entity is updated.
+    protected void onUpdate(){
+        updatedAt = LocalDateTime.now();
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
@@ -52,8 +57,8 @@ public class User {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        User user = (User) o;
-        return getId() != null && Objects.equals(getId(), user.getId());
+        Store store = (Store) o;
+        return getId() != null && Objects.equals(getId(), store.getId());
     }
 
     @Override

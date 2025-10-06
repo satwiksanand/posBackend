@@ -1,5 +1,6 @@
 package com.github.satwiksanand.posSystem.exception.globalHandler;
 
+import com.github.satwiksanand.posSystem.exception.StoreException;
 import com.github.satwiksanand.posSystem.exception.UserException;
 import com.github.satwiksanand.posSystem.payload.dto.ErrorDto;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserException.class)
     public ResponseEntity<ErrorDto> handleUserException(UserException ex){
         ErrorDto err =ErrorDto.builder()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .message(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    @ExceptionHandler(StoreException.class)
+    public ResponseEntity<ErrorDto> handleStoreException(StoreException ex){
+        ErrorDto err = ErrorDto.builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .message(ex.getMessage())
                 .build();
