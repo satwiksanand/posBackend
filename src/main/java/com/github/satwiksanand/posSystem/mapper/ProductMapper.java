@@ -1,5 +1,6 @@
 package com.github.satwiksanand.posSystem.mapper;
 
+import com.github.satwiksanand.posSystem.models.Category;
 import com.github.satwiksanand.posSystem.models.Product;
 import com.github.satwiksanand.posSystem.models.Store;
 import com.github.satwiksanand.posSystem.payload.dto.ProductDto;
@@ -14,13 +15,14 @@ public class ProductMapper {
                 .sku(product.getSku())
                 .description(product.getDescription())
                 .storeId(product.getStore() != null ? product.getStore().getId() : null)
+                .categoryId(product.getCategory() != null ? product.getCategory().getId() : null)
                 .imageUrl(product.getImageUrl())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
                 .build();
     }
 
-    public static Product toEntity(ProductDto productDto, Store store){
+    public static Product toEntity(ProductDto productDto, Store store, Category category){
         return Product.builder()
                 .mrp(productDto.getMrp())
                 .sellingPrice(productDto.getSellingPrice())
@@ -30,6 +32,7 @@ public class ProductMapper {
                 .description(productDto.getDescription())
                 .sku(productDto.getSku())
                 .store(store)
+                .category(category)
                 .build();
     }
 }
