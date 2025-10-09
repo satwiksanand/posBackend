@@ -11,6 +11,7 @@ public class ProductMapper {
                 .id(product.getId())
                 .mrp(product.getMrp())
                 .sellingPrice(product.getSellingPrice())
+                .brand(product.getBrand())
                 .name(product.getName())
                 .sku(product.getSku())
                 .description(product.getDescription())
